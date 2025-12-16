@@ -8,7 +8,7 @@ Specifically, it identifies interface residues between two chains in a dimer str
 from Bio.PDB import PDBParser
 from Bio.PDB.Polypeptide import is_aa
 import numpy as np
-from typing import Dict, Tuple, Union
+from typing import Dict
 
 
 def analyze_dimer_interface(pdb_file: str, distance_threshold: float = 5.0) -> Dict:
