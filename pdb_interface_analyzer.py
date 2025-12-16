@@ -10,6 +10,32 @@ from Bio.PDB.Polypeptide import is_aa
 import numpy as np
 from typing import Dict
 
+def score_matrix(x,y) -> Dict[str, Dict[str, str]]:
+    score_dict = {
+        "A": {"A": "0", "R": "0", "N": "0", "D": "0", "C": "0", "Q": "0", "E": "0", "G": "0", "H": "0", "I": "+", "L": "+", "K": "0", "M": "0", "F": "0", "P": "0", "S": "0", "T": "0", "W": "0", "Y": "0", "V": "+"},
+        "R": {"A": "0", "R": "--", "N": "0", "D": "++", "C": "0", "Q": "0", "E": "++", "G": "0", "H": "+", "I": "0", "L": "0", "K": "--", "M": "0", "F": "0", "P": "0", "S": "0", "T": "0", "W": "+", "Y": "+", "V": "0"},
+        "N": {"A": "0", "R": "0", "N": "0", "D": "+", "C": "0", "Q": "+", "E": "0", "G": "0", "H": "+", "I": "0", "L": "0", "K": "0", "M": "0", "F": "0", "P": "0", "S": "+", "T": "+", "W": "0", "Y": "+", "V": "0"},
+        "D": {"A": "0", "R": "++", "N": "+", "D": "--", "C": "0", "Q": "0", "E": "--", "G": "0", "H": "0", "I": "0", "L": "0", "K": "++", "M": "0", "F": "0", "P": "0", "S": "0", "T": "0", "W": "0", "Y": "0", "V": "0"},
+        "C": {"A": "0", "R": "0", "N": "0", "D": "0", "C": "++", "Q": "0", "E": "0", "G": "0", "H": "0", "I": "0", "L": "0", "K": "0", "M": "0", "F": "0", "P": "0", "S": "0", "T": "0", "W": "0", "Y": "0", "V": "0"},
+        "Q": {"A": "0", "R": "0", "N": "+", "D": "0", "C": "0", "Q": "0", "E": "+", "G": "0", "H": "+", "I": "0", "L": "0", "K": "0", "M": "0", "F": "0", "P": "0", "S": "0", "T": "0", "W": "0", "Y": "+", "V": "0"},
+        "E": {"A": "0", "R": "++", "N": "0", "D": "--", "C": "0", "Q": "+", "E": "--", "G": "0", "H": "0", "I": "0", "L": "0", "K": "++", "M": "0", "F": "0", "P": "0", "S": "0", "T": "0", "W": "0", "Y": "0", "V": "0"},
+        "G": {"A": "0", "R": "0", "N": "0", "D": "0", "C": "0", "Q": "0", "E": "0", "G": "0", "H": "0", "I": "0", "L": "0", "K": "0", "M": "0", "F": "0", "P": "0", "S": "0", "T": "0", "W": "0", "Y": "0", "V": "0"},
+        "H": {"A": "0", "R": "+", "N": "+", "D": "0", "C": "0", "Q": "+", "E": "0", "G": "0", "H": "0", "I": "0", "L": "0", "K": "+", "M": "0", "F": "+", "P": "0", "S": "0", "T": "0", "W": "++", "Y": "++", "V": "0"},
+        "I": {"A": "+", "R": "0", "N": "0", "D": "0", "C": "0", "Q": "0", "E": "0", "G": "0", "H": "0", "I": "++", "L": "++", "K": "0", "M": "+", "F": "+", "P": "-", "S": "0", "T": "0", "W": "+", "Y": "+", "V": "++"},
+        "L": {"A": "+", "R": "0", "N": "0", "D": "0", "C": "0", "Q": "0", "E": "0", "G": "0", "H": "0", "I": "++", "L": "++", "K": "0", "M": "++", "F": "++", "P": "-", "S": "0", "T": "0", "W": "+", "Y": "+", "V": "++"},
+        "K": {"A": "0", "R": "--", "N": "0", "D": "++", "C": "0", "Q": "0", "E": "++", "G": "0", "H": "+", "I": "0", "L": "0", "K": "--", "M": "0", "F": "0", "P": "0", "S": "0", "T": "0", "W": "0", "Y": "0", "V": "0"},
+        "M": {"A": "0", "R": "0", "N": "0", "D": "0", "C": "0", "Q": "0", "E": "0", "G": "0", "H": "0", "I": "+", "L": "++", "K": "0", "M": "+", "F": "+", "P": "0", "S": "0", "T": "0", "W": "+", "Y": "+", "V": "+"},
+        "F": {"A": "0", "R": "0", "N": "0", "D": "0", "C": "0", "Q": "0", "E": "0", "G": "0", "H": "+", "I": "+", "L": "++", "K": "0", "M": "+", "F": "++", "P": "-", "S": "0", "T": "0", "W": "++", "Y": "++", "V": "+"},
+        "P": {"A": "0", "R": "0", "N": "0", "D": "0", "C": "0", "Q": "0", "E": "0", "G": "0", "H": "0", "I": "-", "L": "-", "K": "0", "M": "0", "F": "-", "P": "0", "S": "0", "T": "0", "W": "-", "Y": "-", "V": "-"},
+        "S": {"A": "0", "R": "0", "N": "+", "D": "0", "C": "0", "Q": "0", "E": "0", "G": "0", "H": "0", "I": "0", "L": "0", "K": "0", "M": "0", "F": "0", "P": "0", "S": "0", "T": "0", "W": "0", "Y": "+", "V": "0"},
+        "T": {"A": "0", "R": "0", "N": "+", "D": "0", "C": "0", "Q": "0", "E": "0", "G": "0", "H": "0", "I": "0", "L": "0", "K": "0", "M": "0", "F": "0", "P": "0", "S": "0", "T": "0", "W": "0", "Y": "+", "V": "0"},
+        "W": {"A": "0", "R": "+", "N": "0", "D": "0", "C": "0", "Q": "0", "E": "0", "G": "0", "H": "++", "I": "+", "L": "+", "K": "0", "M": "+", "F": "++", "P": "-", "S": "0", "T": "0", "W": "++", "Y": "++", "V": "+"},
+        "Y": {"A": "0", "R": "+", "N": "+", "D": "0", "C": "0", "Q": "+", "E": "0", "G": "0", "H": "++", "I": "+", "L": "+", "K": "0", "M": "+", "F": "++", "P": "-", "S": "+", "T": "+", "W": "++", "Y": "++", "V": "+"},
+        "V": {"A": "+", "R": "0", "N": "0", "D": "0", "C": "0", "Q": "0", "E": "0", "G": "0", "H": "0", "I": "++", "L": "++", "K": "0", "M": "+", "F": "+", "P": "-", "S": "0", "T": "0", "W": "+", "Y": "+", "V": "++"}
+    }
+    score_mapping_dict = {"++": 2, "+": 1, "0": 0, "-": -1, "--": -2}
+    score = score_mapping_dict[score_dict[x][y]]
+    return score
 
 def analyze_dimer_interface(pdb_file: str, distance_threshold: float = 5.0) -> Dict:
     """
@@ -93,7 +119,7 @@ def analyze_dimer_interface(pdb_file: str, distance_threshold: float = 5.0) -> D
     
     # Build interface dictionary
     interface_dict = {}
-    
+
     # Iterate through each residue in the shorter chain
     for short_res in short_chain_residues:
         short_key = (
@@ -101,15 +127,15 @@ def analyze_dimer_interface(pdb_file: str, distance_threshold: float = 5.0) -> D
             short_res.id[1],  # residue number
             short_res.get_resname()
         )
-        
+
         # Dictionary to store interacting residues from the long chain
         interacting_residues = {}
-        
+
         # Check distance to all residues in the longer chain
         for long_res in long_chain_residues:
             # Calculate minimum distance between any atoms of the two residues
             min_distance = float('inf')
-            
+
             for short_atom in short_res:
                 for long_atom in long_res:
                     distance = np.linalg.norm(
@@ -117,7 +143,7 @@ def analyze_dimer_interface(pdb_file: str, distance_threshold: float = 5.0) -> D
                     )
                     if distance < min_distance:
                         min_distance = distance
-            
+
             # If distance is within threshold, add to interacting residues
             if min_distance <= distance_threshold:
                 long_key = (
@@ -125,12 +151,23 @@ def analyze_dimer_interface(pdb_file: str, distance_threshold: float = 5.0) -> D
                     long_res.id[1],  # residue number
                     long_res.get_resname()
                 )
-                interacting_residues[long_key] = {'distance': round(min_distance, 2)}
-        
+                # Get residue names (1-letter code) for scoring
+                short_resname = short_res.get_resname()
+                long_resname = long_res.get_resname()
+                # Convert 3-letter to 1-letter code for score_matrix
+                from Bio.Data.IUPACData import protein_letters_3to1
+                try:
+                    short_aa = protein_letters_3to1[short_resname.capitalize()]
+                    long_aa = protein_letters_3to1[long_resname.capitalize()]
+                    score = score_matrix(short_aa, long_aa)
+                except Exception:
+                    score = None
+                interacting_residues[long_key] = {'distance': round(min_distance, 2), 'score': score}
+
         # Only add to interface dict if there are interacting residues
         if interacting_residues:
             interface_dict[short_key] = interacting_residues
-    
+
     return interface_dict
 
 
@@ -162,13 +199,42 @@ def format_interface_report(interface_dict: Dict) -> str:
         chain_id, res_num, res_name = short_res_key
         report_lines.append(f"\nResidue {res_name}-{res_num} (Chain {chain_id}):")
         report_lines.append(f"  Contacts with {len(long_res_dict)} residues in longer chain:")
-        
+
         for long_res_key, dist_info in sorted(long_res_dict.items()):
             long_chain, long_num, long_name = long_res_key
             distance = dist_info['distance']
+            score = dist_info.get('score', None)
+            score_str = f", Score: {score}" if score is not None else ""
             report_lines.append(
-                f"    - {long_name}-{long_num} (Chain {long_chain}): {distance:.2f} Å"
+                f"    - {long_name}-{long_num} (Chain {long_chain}): {distance:.2f} Å{score_str}"
             )
     
     report_lines.append("\n" + "=" * 70)
     return "\n".join(report_lines)
+
+if __name__ == "__main__":
+    import argparse
+    
+    parser = argparse.ArgumentParser(
+        description="Analyze protein-protein interfaces in PDB dimer structures."
+    )
+    parser.add_argument(
+        "pdb_file",
+        type=str,
+        help="Path to the PDB file containing the dimer structure"
+    )
+    parser.add_argument(
+        "--distance",
+        type=float,
+        default=5.0,
+        help="Distance threshold (in Angstroms) for defining interface residues (default: 5.0)"
+    )
+    
+    args = parser.parse_args()
+    
+    try:
+        interface = analyze_dimer_interface(args.pdb_file, args.distance)
+        report = format_interface_report(interface)
+        print(report)
+    except Exception as e:
+        print(f"Error: {e}")
